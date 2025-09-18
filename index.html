@@ -1,0 +1,2076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UoE Christian Union - Bible Study Search</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #E91E63;
+            --primary-blue: #2196F3;
+            --accent-yellow: #FFC107;
+            --light-pink: #FCE4EC;
+            --light-blue: #E3F2FD;
+            --light-yellow: #FFF8E1;
+            --text-dark: #2C3E50;
+            --text-light: #6C757D;
+            --white: #FFFFFF;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-blue) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent-yellow) 0%, var(--primary-pink) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-pink) 50%, var(--light-yellow) 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            border: 3px solid var(--white);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .user-type-toggle {
+            display: flex;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50px;
+            padding: 4px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Added sliding indicator for toggle */
+        .toggle-indicator {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: calc(50% - 4px);
+            height: calc(100% - 8px);
+            background: var(--gradient-primary);
+            border-radius: 50px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .toggle-indicator.pastor {
+            transform: translateX(100%);
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            color: var(--text-light);
+            position: relative;
+            z-index: 2;
+            min-width: 140px;
+        }
+
+        .toggle-btn.active {
+            color: var(--white);
+        }
+
+        .search-forms-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .search-form-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            margin-bottom: 30px;
+            border: 1px solid rgba(233, 30, 99, 0.1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .search-form-card.active {
+            position: relative;
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .search-form-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .form-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--white);
+            margin: 0 auto 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .member-form-icon {
+            background: var(--gradient-primary);
+        }
+
+        .pastor-form-icon {
+            background: var(--gradient-accent);
+        }
+
+        .form-description {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 25px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        /* Added input validation feedback */
+        .input-feedback {
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            font-size: 0.8rem;
+            color: var(--primary-pink);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .input-feedback.show {
+            opacity: 1;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background: #FAFAFA;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+            transform: scale(1.02);
+        }
+
+        /* Added autocomplete dropdown styling */
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .autocomplete-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .autocomplete-item:hover,
+        .autocomplete-item.highlighted {
+            background-color: var(--light-blue);
+        }
+
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-btn {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .search-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .search-btn:hover::before {
+            left: 100%;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .search-btn:active {
+            transform: translateY(0);
+        }
+
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Improved loading spinner for mobile */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #E0E0E0;
+            border-top: 3px solid var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 600px;
+            display: none;
+            animation: fadeInUp 0.5s ease-out;
+            border: 1px solid rgba(233, 30, 99, 0.1);
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #F0F0F0;
+        }
+
+        .result-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--white);
+            font-weight: bold;
+        }
+
+        .member-icon {
+            background: var(--gradient-primary);
+        }
+
+        .pastor-icon {
+            background: var(--gradient-accent);
+        }
+
+        .result-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .result-role {
+            font-size: 1rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .result-details {
+            display: grid;
+            gap: 15px;
+        }
+
+        .detail-item {
+            background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-blue);
+            transition: transform 0.2s ease;
+        }
+
+        .detail-item:hover {
+            transform: translateX(5px);
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: var(--text-light);
+        }
+
+        /* Improved members list with collapsible functionality */
+        .members-list {
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-pink) 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .members-title {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .collapse-icon {
+            transition: transform 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .members-list.collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+
+
+
+       .members-container {
+    max-height: 400px; /* you can adjust this */
+    overflow-y: auto;
+}
+
+
+        .members-list.collapsed .members-container {
+            max-height: 0;
+        }
+
+        .member-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px 18px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 12px;
+        }
+
+        .member-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+
+        .member-info {
+            margin-bottom: 12px;
+        }
+
+        .member-info strong {
+            font-size: 1rem;
+            color: #2C3E50;
+        }
+
+        .member-info span {
+            font-size: 0.9rem;
+            color: #6C757D;
+        }
+
+    
+.contact-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* Improved WhatsApp Button */
+.contact-btn.whatsapp-btn {
+  background: #25d366;
+  color: white;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.3s ease;
+}
+.contact-btn.whatsapp-btn:hover {
+  background: #1ebc57;
+}
+
+/* Improved Call Button */
+.contact-btn.call-btn {
+  background: #ff4d4f;
+  color: white;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.3s ease;
+}
+.contact-btn.call-btn:hover {
+  background: #e04344;
+}
+
+
+ .contact-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.contact-btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+/* WhatsApp */
+.whatsapp-btn {
+    background-color: #25D366;
+    color: #fff;
+}
+.whatsapp-btn:hover {
+    background-color: #1ebe57;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(37, 211, 102, 0.3);
+}
+
+/* Call */
+.call-btn {
+    background-color: #007AFF;
+    color: #fff;
+}
+.call-btn:hover {
+    background-color: #005BBB;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 122, 255, 0.3);
+}
+/* Sub-committee button (your gradient accent) */
+.subcommittee-btn {
+  background: var(--gradient-accent);
+  color: #fff;
+}
+.subcommittee-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+
+
+        /* Improved not-found section with better spacing */
+        .not-found {
+            text-align: center;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--light-pink) 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            min-height: auto;
+        }
+
+        .not-found::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+              pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .not-found-icon-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 25px;
+        }
+
+        .not-found-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--white);
+            margin: 0 auto;
+            box-shadow: var(--shadow);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .not-found-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .not-found-message {
+            color: var(--text-dark);
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-size: 1rem;
+            font-weight: 500;
+            position: relative;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+    
+
+        .register-btn {
+            background: var(--gradient-accent);
+            color: var(--white);
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            min-width: 200px;
+            justify-content: center;
+        }
+
+        .register-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .register-btn:hover::before {
+            left: 100%;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+/* Back button */
+.action-btn {
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  margin: 5px;
+  min-width: 180px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.back-btn {
+  background: var(--primary-blue, #007bff);
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #0056b3;
+}
+
+
+        /* Added error message styling */
+        .error-message {
+            background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+            color: #c62828;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #e91e63;
+            display: none;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Improved responsive design for mobile */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .search-form-card {
+                padding: 25px;
+            }
+
+            .results {
+                padding: 20px;
+            }
+
+            .result-name {
+                font-size: 1.5rem;
+            }
+
+            .not-found {
+                padding: 30px 20px;
+            }
+
+            .not-found-title {
+                font-size: 1.6rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .register-btn {
+                padding: 15px 30px;
+                font-size: 0.95rem;
+                min-width: 180px;
+            }
+
+            .user-type-toggle {
+                margin-bottom: 20px;
+            }
+
+            .toggle-btn {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+                min-width: 120px;
+            }
+
+            .contact-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .contact-btn {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .spinner {
+                width: 28px;
+                height: 28px;
+                border-width: 2px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                width: 100px;
+                height: 100px;
+            }
+
+            .title {
+                font-size: 1.8rem;
+            }
+
+            .search-form-card {
+                padding: 20px;
+            }
+
+            .not-found-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+
+            .toggle-btn {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+                min-width: 100px;
+            }
+
+            .register-btn {
+                padding: 14px 24px;
+                font-size: 0.9rem;
+                min-width: 160px;
+            }
+
+            .back-btn {
+                padding: 10px 20px;
+                min-width: 120px;
+            }
+
+            .member-item {
+                padding: 12px 14px;
+            }
+
+            .contact-btn {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+        }
+.pastor-info {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #E3F2FD 0%, #FCE4EC 100%);
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.pastor-info h4 {
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+        .contact-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .contact-group {
+            color: #666;
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .contact-btn {
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .whatsapp-btn {
+            background-color: #25D366;
+        }
+
+        .call-btn {
+            background-color: #128C7E;
+        }
+
+        .no-contact {
+            color: #999;
+        }
+
+        .member-result {
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+
+        .member-result h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .member-info {
+            margin-bottom: 15px;
+        }
+
+        .member-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .member-group {
+            color: #666;
+        }
+
+        .update-btn {
+    background-color: #6C63FF; /* a nice purple tone */
+    color: white;
+}
+.update-btn:hover {
+    background-color: #574bdb;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(108, 99, 255, 0.3);
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--primary-blue); /* Noticeable blue */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.close-btn:hover {
+  background: #0056b3; /* darker blue on hover */
+  transform: scale(1.05);
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo_cu-9KyeIhafn8fsPC7acscoqVlEuFOqzU.jpeg" alt="University of Embu Christian Union Logo">
+            </div>
+            <h1 class="title">Bible Study Search</h1>
+            <p class="subtitle">University of Embu Christian Union</p>
+        </div>
+
+        <!-- Enhanced toggle with sliding indicator -->
+        <div class="user-type-toggle">
+            <div class="toggle-indicator" id="toggleIndicator"></div>
+            <button class="toggle-btn active" id="memberToggle" onclick="switchUserType('member')">
+                👤 I am a Member
+            </button>
+            <button class="toggle-btn" id="pastorToggle" onclick="switchUserType('pastor')">
+                ✝️ I am a Pastor
+            </button>
+        </div>
+
+        <!-- Added error message container -->
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="search-forms-container">
+            <!-- Member Search Form -->
+            <div class="search-form-card active" id="memberSearchCard">
+                <div class="form-icon member-form-icon">👤</div>
+                <h2 class="search-title">Find Your Pastor</h2>
+                <p class="form-description">Enter your full name to find your Bible study pastor and group information.</p>
+                <form class="search-form" id="memberSearchForm">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            class="search-input" 
+                            id="memberNameInput" 
+                            placeholder="Enter your full name..."
+                            autocomplete="off"
+                            required
+                        >
+                        <!-- Added autocomplete dropdown -->
+                        <div class="autocomplete-dropdown" id="memberAutocomplete"></div>
+                        <div class="input-feedback" id="memberInputFeedback"></div>
+                    </div>
+                    <button type="submit" class="search-btn" id="memberSearchBtn">
+                        <span>Find My Pastor</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Pastor Search Form -->
+            <div class="search-form-card" id="pastorSearchCard">
+                <div class="form-icon pastor-form-icon">✝️</div>
+                <h2 class="search-title">View Your Members</h2>
+                <p class="form-description">Enter your full name to see all members in your Bible study group.</p>
+                <form class="search-form" id="pastorSearchForm">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            class="search-input" 
+                            id="pastorNameInput" 
+                            placeholder="Enter your full name..."
+                            autocomplete="off"
+                            required
+                        >
+                        <!-- Added autocomplete dropdown -->
+                        <div class="autocomplete-dropdown" id="pastorAutocomplete"></div>
+                        <div class="input-feedback" id="pastorInputFeedback"></div>
+                    </div>
+                    <button type="submit" class="search-btn" id="pastorSearchBtn">
+                        <span>View My Members</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Searching for your information...</p>
+        </div>
+
+        <div class="results" id="results">
+            <div class="result-header">
+                <div class="result-icon" id="resultIcon">👤</div>
+                <div>
+                    <div class="result-name" id="resultName"></div>
+                    <div class="result-role" id="resultRole"></div>
+                </div>
+            </div>
+            <div class="result-details" id="resultDetails"></div>
+            <div class="action-buttons">
+                <button class="back-btn" onclick="resetSearch()">Search Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const MEMBERS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1IIp5fH0xtNBB8879qeIfHXAcm_rF3RD2jYScnFtJXi0/export?format=csv';
+        const PASTORS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1KMFp7Sjbl8F4IRfcsmuUKE91I24igjHr-HwjhxlluW4/export?format=csv';
+
+        const SUBCOM_MEMBERS = [
+            { name: 'Sylvia Sabina', phone: '+254713077471' },
+            { name: 'Kenneth Mutinga', phone: '+254718512066' },
+            { name: 'Ann Ngina', phone: '+254716464983' },
+            { name: 'Mercy Kendi', phone: '+254740437421' },
+            { name: 'Daniel Waliaula', phone: '+254745345149' },
+            { name: 'Daniel Mulei', phone: '+254725100301' },
+            { name: 'Samuel Mwangi', phone: '+254798542595' }
+        ];
+
+        let membersData = [];
+        let pastorsData = [];
+        let currentUserType = 'member';
+        let dataLoaded = false;
+
+        let autocompleteTimeout;
+        let selectedAutocompleteIndex = -1;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+            setupAutocomplete();
+        });
+
+        function setupEventListeners() {
+            const memberSearchForm = document.getElementById('memberSearchForm');
+            const pastorSearchForm = document.getElementById('pastorSearchForm');
+            const memberNameInput = document.getElementById('memberNameInput');
+            const pastorNameInput = document.getElementById('pastorNameInput');
+
+            memberSearchForm.addEventListener('submit', (e) => handleSearch(e, 'member'));
+            pastorSearchForm.addEventListener('submit', (e) => handleSearch(e, 'pastor'));
+            
+            memberNameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSearch(e, 'member');
+                }
+            });
+
+            pastorNameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSearch(e, 'pastor');
+                }
+            });
+
+            memberNameInput.addEventListener('input', function() {
+                validateInput(this, 'memberInputFeedback');
+            });
+
+            pastorNameInput.addEventListener('input', function() {
+                validateInput(this, 'pastorInputFeedback');
+            });
+        }
+
+        function validateInput(input, feedbackId) {
+            const feedback = document.getElementById(feedbackId);
+            const value = input.value.trim();
+            
+            if (value.length > 0 && value.length < 2) {
+                feedback.textContent = 'Please enter at least 2 characters';
+                feedback.classList.add('show');
+            } else {
+                feedback.classList.remove('show');
+            }
+        }
+
+        function setupAutocomplete() {
+            const memberInput = document.getElementById('memberNameInput');
+            const pastorInput = document.getElementById('pastorNameInput');
+            
+            memberInput.addEventListener('input', (e) => handleAutocomplete(e, 'member'));
+            pastorInput.addEventListener('input', (e) => handleAutocomplete(e, 'pastor'));
+            
+            // Handle keyboard navigation
+            memberInput.addEventListener('keydown', (e) => handleAutocompleteKeydown(e, 'member'));
+            pastorInput.addEventListener('keydown', (e) => handleAutocompleteKeydown(e, 'pastor'));
+            
+            // Hide dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.input-group')) {
+                    hideAutocomplete();
+                }
+            });
+        }
+
+        function handleAutocomplete(e, userType) {
+            const query = e.target.value.trim().toLowerCase();
+            const dropdownId = userType === 'member' ? 'memberAutocomplete' : 'pastorAutocomplete';
+            
+            clearTimeout(autocompleteTimeout);
+            
+            if (query.length < 2) {
+                hideAutocomplete();
+                return;
+            }
+            
+            // Debounce autocomplete requests
+            autocompleteTimeout = setTimeout(() => {
+                showAutocomplete(query, userType, dropdownId);
+            }, 300);
+        }
+
+        function showAutocomplete(query, userType, dropdownId) {
+            if (!dataLoaded) return;
+            
+            const dropdown = document.getElementById(dropdownId);
+            const data = userType === 'member' ? membersData : pastorsData;
+            
+            const matches = data.filter(item => 
+                item.name && item.name.toLowerCase().includes(query)
+            ).slice(0, 5); // Limit to 5 suggestions
+            
+            if (matches.length === 0) {
+                hideAutocomplete();
+                return;
+            }
+            
+            dropdown.innerHTML = matches.map((item, index) => 
+                `<div class="autocomplete-item" data-index="${index}" onclick="selectAutocomplete('${item.name}', '${userType}')">${item.name}</div>`
+            ).join('');
+            
+            dropdown.style.display = 'block';
+            selectedAutocompleteIndex = -1;
+        }
+
+        function handleAutocompleteKeydown(e, userType) {
+            const dropdownId = userType === 'member' ? 'memberAutocomplete' : 'pastorAutocomplete';
+            const dropdown = document.getElementById(dropdownId);
+            const items = dropdown.querySelectorAll('.autocomplete-item');
+            
+            if (items.length === 0) return;
+            
+            switch (e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, items.length - 1);
+                    updateAutocompleteHighlight(items);
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    selectedAutocompleteIndex = Math.max(selectedAutocompleteIndex - 1, -1);
+                    updateAutocompleteHighlight(items);
+                    break;
+                case 'Enter':
+                    if (selectedAutocompleteIndex >= 0) {
+                        e.preventDefault();
+                        items[selectedAutocompleteIndex].click();
+                    }
+                    break;
+                case 'Escape':
+                    hideAutocomplete();
+                    break;
+            }
+        }
+
+        function updateAutocompleteHighlight(items) {
+            items.forEach((item, index) => {
+                item.classList.toggle('highlighted', index === selectedAutocompleteIndex);
+            });
+        }
+
+        function selectAutocomplete(name, userType) {
+            const inputId = userType === 'member' ? 'memberNameInput' : 'pastorNameInput';
+            document.getElementById(inputId).value = name;
+            hideAutocomplete();
+        }
+
+        function hideAutocomplete() {
+            document.getElementById('memberAutocomplete').style.display = 'none';
+            document.getElementById('pastorAutocomplete').style.display = 'none';
+            selectedAutocompleteIndex = -1;
+        }
+
+        function switchUserType(type) {
+            currentUserType = type;
+            
+            // Update toggle indicator
+            const indicator = document.getElementById('toggleIndicator');
+            indicator.classList.toggle('pastor', type === 'pastor');
+            
+            // Update toggle buttons
+            document.getElementById('memberToggle').classList.toggle('active', type === 'member');
+            document.getElementById('pastorToggle').classList.toggle('active', type === 'pastor');
+            
+            // Update form cards with smooth transition
+            const memberCard = document.getElementById('memberSearchCard');
+            const pastorCard = document.getElementById('pastorSearchCard');
+            
+            if (type === 'member') {
+                pastorCard.classList.remove('active');
+                setTimeout(() => memberCard.classList.add('active'), 200);
+            } else {
+                memberCard.classList.remove('active');
+                setTimeout(() => pastorCard.classList.add('active'), 200);
+            }
+            
+            // Reset any previous results and hide autocomplete
+            resetSearch();
+            hideAutocomplete();
+            hideError();
+        }
+
+        async function loadData() {
+            try {
+                showError('Loading data...', false);
+                
+                const [membersResponse, pastorsResponse] = await Promise.all([
+                    fetch(MEMBERS_SHEET_URL),
+                    fetch(PASTORS_SHEET_URL)
+                ]);
+
+                if (!membersResponse.ok || !pastorsResponse.ok) {
+                    throw new Error('Failed to fetch data from Google Sheets');
+                }
+
+                const membersCsv = await membersResponse.text();
+                const pastorsCsv = await pastorsResponse.text();
+                
+                membersData = parseCsv(membersCsv);
+                pastorsData = parseCsv(pastorsCsv);
+                
+                dataLoaded = true;
+                hideError();
+                console.log('[v0] Data loaded successfully', { members: membersData.length, pastors: pastorsData.length });
+            } catch (error) {
+                console.error('[v0] Error loading data:', error);
+                showError('Failed to load data. Please check your internet connection and try again.');
+                dataLoaded = false;
+            }
+        }
+
+ function parseCsv(csvText) {
+    const lines = csvText.split('\n').filter(line => line.trim() !== '');
+    
+    let currentGroup = null;
+    let currentHeaders = [];
+    const data = [];
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+
+        // Detect group headers in members sheet (like "GROUP 1")
+        if (line.toUpperCase().startsWith('GROUP')) {
+            const match = line.match(/\d+/);
+            currentGroup = match ? parseInt(match[0], 10) : null; // Always store as number
+            continue;
+        }
+
+        // Detect column headers
+        if (line.toLowerCase().startsWith('name') || line.toLowerCase().startsWith('group')) {
+            currentHeaders = line.split(',').map(h => h.trim());
+            continue;
+        }
+
+        // Skip empty lines or repeated headers
+        if (!line || line.toLowerCase().includes('name') || line.toLowerCase().includes('phone')) {
+            continue;
+        }
+
+        // Parse data rows
+        const values = line.split(',').map(v => v.trim());
+
+        // If it's a pastor row (first value is numeric group)
+        if (!isNaN(values[0])) {
+            const entry = {
+                group: parseInt(values[0], 10),  // numeric
+                name: values[1],
+                phone_number: values[2] || '',
+                year: values[3] || ''
+            };
+            data.push(entry);
+        }
+        // Otherwise it's a member row
+        else if (values.length >= 2 && values[0] && values[1]) {
+            const entry = {
+                name: values[0],
+                phone_number: values[1],
+                group: currentGroup   // numeric from "GROUP X"
+            };
+            if (values.length > 2 && values[2]) {
+                entry.year = values[2];
+            }
+            data.push(entry);
+        }
+    }
+
+    return data;
+}
+
+
+        async function handleSearch(e, userType = currentUserType) {
+            e.preventDefault();
+            
+            if (!dataLoaded) {
+                showError('Data is still loading. Please wait a moment and try again.');
+                return;
+            }
+            
+            const nameInput = userType === 'member' 
+                ? document.getElementById('memberNameInput')
+                : document.getElementById('pastorNameInput');
+            const searchName = nameInput.value.trim();
+            
+            if (!searchName) {
+                showError('Please enter your name');
+                nameInput.focus();
+                return;
+            }
+
+            if (searchName.length < 2) {
+                showError('Please enter at least 2 characters');
+                nameInput.focus();
+                return;
+            }
+
+            hideError();
+            hideAutocomplete();
+            showLoading();
+            
+            // Simulate API delay for better UX
+            setTimeout(() => {
+                if (userType === 'member') {
+                    searchMember(searchName);
+                } else {
+                    searchPastor(searchName);
+                }
+            }, 1000);
+        }
+
+       function normalizeText(text) {
+    return text ? text.toLowerCase().trim().replace(/\s+/g, ' ') : '';
+}
+
+function searchMember(searchName) {
+    const query = normalizeText(searchName);
+
+    if (!query || query.length < 2) {
+        showError('Please enter at least 2 characters for search.');
+        hideLoading();
+        return;
+    }
+
+    // Step 0: Check if this name is a pastor
+    const matchedPastor = pastorsData.find(p => normalizeText(p.name) === query);
+    if (matchedPastor) {
+        hideLoading();
+        displayPastorWarning(matchedPastor);
+        return;
+    }
+
+    // Step 1: Try exact match (exclude pastors)
+    let memberResults = membersData.filter(m => normalizeText(m.name) === query);
+
+    // Step 2: If no exact, try partial
+    if (memberResults.length === 0) {
+        memberResults = membersData.filter(m => normalizeText(m.name).includes(query));
+    }
+
+    // Step 3: If still no result, try fuzzy
+    if (memberResults.length === 0) {
+        const queryWords = query.split(' ');
+        memberResults = membersData.filter(m => {
+            const name = normalizeText(m.name);
+            return queryWords.every(w => name.includes(w));
+        });
+    }
+
+    hideLoading();
+
+    if (memberResults.length > 0) {
+        memberResults.forEach(member => {
+            const memberGroup = member.group;
+
+            const assignedPastor = pastorsData.find(p =>
+                Number(p.group) === Number(memberGroup)
+            );
+
+            displayMemberResult({
+                ...member,
+                pastor: assignedPastor,
+                group: memberGroup
+            });
+        });
+    } else {
+        displayNotFound('member');
+    }
+}
+
+function displayPastorWarning(pastor) {
+    const results = document.getElementById('results');
+    results.innerHTML = `
+        <div class="not-found">
+            <!-- Close button -->
+            <button class="close-btn" id="closeWarningBtn">&times;</button>
+
+            <div class="not-found-icon-container">
+                <div class="not-found-icon">✝️</div>
+            </div>
+            <h3 class="not-found-title">You are a Pastor</h3>
+            <p class="not-found-message">
+                Hello <strong>${pastor.name}</strong>, our records show you are a Pastor in Group ${pastor.group}.<br>
+                Please use the <strong>Pastor tab</strong> to search for your group members.
+            </p>
+            <div class="action-buttons">
+                <button id="goToPastorBtn" class="back-btn">Go to Pastor Tab</button>
+                <button id="searchAgainBtn" class="back-btn">Search Again</button>
+            </div>
+        </div>
+    `;
+    results.style.display = 'block';
+
+    // Attach event listeners
+    document.getElementById('goToPastorBtn').addEventListener('click', () => {
+        switchUserType('pastor');
+    });
+
+    document.getElementById('searchAgainBtn').addEventListener('click', () => {
+        resetSearch();
+    });
+
+    document.getElementById('closeWarningBtn').addEventListener('click', () => {
+        resetSearch();
+    });
+}
+
+
+
+
+function searchPastor(searchName) {
+    const query = normalizeText(searchName);
+
+    if (!query || query.length < 2) {
+        showError('Please enter at least 2 characters for search.');
+        hideLoading();
+        return;
+    }
+
+    // Step 1: Try exact match
+    let pastorResults = pastorsData.filter(p =>
+        normalizeText(p.name) === query
+    );
+
+    // Step 2: If no exact, try partial
+    if (pastorResults.length === 0) {
+        pastorResults = pastorsData.filter(p =>
+            normalizeText(p.name).includes(query)
+        );
+    }
+
+    // Step 3: If still no result, try fuzzy (multi-word flexible)
+    if (pastorResults.length === 0) {
+        const queryWords = query.split(' ');
+        pastorResults = pastorsData.filter(p => {
+            const name = normalizeText(p.name);
+            return queryWords.every(w => name.includes(w));
+        });
+    }
+
+    hideLoading();
+
+    if (pastorResults.length > 0) {
+        pastorResults.forEach(pastor => {
+            const pastorGroup = pastor.group;
+
+            const groupMembers = membersData.filter(m =>
+    Number(m.group) === Number(pastorGroup)
+);
+
+
+            displayPastorResult({
+                ...pastor,
+                groupMembers,
+                group: pastorGroup
+            });
+        });
+    } else {
+        displayNotFound('pastor');
+    }
+}
+
+
+
+        function sanitizePhoneNumber(phone) {
+            if (!phone) return null;
+            // Remove all non-digit characters except +
+            return phone.replace(/[^\d+]/g, '');
+        }
+
+        function displayMemberResult(member) {
+            const results = document.getElementById('results');
+            
+let pastorInfo = '';
+if (member.pastor) {
+    const pastorPhone = sanitizePhoneNumber(member.pastor.phone_number);
+    pastorInfo = `
+        <div class="pastor-info">
+            <h4>✝️ Your Pastor</h4>
+            <div class="contact-card">
+                <div class="contact-info">
+                    <div class="contact-name">${member.pastor.name}</div>
+                    <div class="contact-group">${member.group || 'Group not specified'}</div>
+                </div>
+                <div class="contact-actions">
+                    ${pastorPhone ? `
+                        <a href="https://wa.me/${pastorPhone}" class="contact-btn whatsapp-btn" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="18" height="18" fill="currentColor">
+                                <path d="M16 0C7.163 0 0 6.716 0 15c0 2.646.75 5.136 2.052 7.293L0 32l9.926-2.667A16.07 16.07 0 0016 30c8.837 0 16-6.716 16-15S24.837 0 16 0zm0 27.273c-2.463 0-4.773-.684-6.75-1.867l-.484-.289-5.9 1.582 1.575-5.657-.308-.514A11.78 11.78 0 014.364 15c0-6.49 5.191-11.773 11.636-11.773S27.636 8.51 27.636 15c0 6.49-5.191 12.273-11.636 12.273zm6.242-9.273c-.338-.169-2.008-.992-2.317-1.106-.31-.114-.537-.169-.764.169-.225.34-.878 1.106-1.076 1.33-.198.225-.397.254-.735.085-.338-.169-1.428-.523-2.72-1.669-1.006-.897-1.686-2.004-1.885-2.344-.198-.34-.021-.523.148-.692.152-.151.338-.397.507-.596.169-.198.225-.34.338-.565.113-.225.056-.425-.028-.596-.084-.169-.764-1.834-1.046-2.516-.275-.66-.55-.57-.764-.58l-.65-.012c-.226 0-.596.085-.91.425-.31.34-1.19 1.162-1.19 2.836s1.219 3.29 1.389 3.515c.169.225 2.398 3.667 5.815 5.141.813.352 1.447.561 1.942.716.816.26 1.56.223 2.145.135.654-.098 2.008-.82 2.29-1.613.282-.793.282-1.473.197-1.613-.084-.14-.31-.225-.65-.395z"/>
+                            </svg>
+                            WhatsApp
+                        </a>
+                        <a href="tel:${pastorPhone}" class="contact-btn call-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                                <path d="M6.62 10.79a15.054 15.054 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.24.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                            </svg>
+                            Call
+                        </a>
+                    ` : '<span class="no-contact">No contact available</span>'}
+                </div>
+            </div>
+            <div class="contact-buttons" style="margin-top: 15px;">
+                <button class="contact-btn whatsapp-btn" onclick="showGroupMembers()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V20h14v-3.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V20h6v-3.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
+                    Contact Group Members
+                </button>
+                <button class="contact-btn subcommittee-btn" onclick="showSubCommittee()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V20h14v-3.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V20h6v-3.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
+                    Contact Sub-Committee
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+            results.innerHTML = `
+                <div class="result-header">
+                    <div class="result-icon member-icon">👤</div>
+                    <div>
+                        <div class="result-name">${member.name}</div>
+                        <div class="result-role">Member of ${member.group || 'Bible Study Group'}</div>
+                    </div>
+                </div>
+                <div class="result-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Your Group</div>
+                        <div class="detail-value">${member.group || 'Group not specified'}</div>
+                    </div>
+                    ${pastorInfo}
+                </div>
+                <div class="action-buttons">
+                    <button class="back-btn" onclick="resetSearch()">Search Again</button>
+                </div>
+            `;
+            
+            results.style.display = 'block';
+        }
+
+        function displayPastorResult(pastor) {
+            const results = document.getElementById('results');
+
+            let membersListHTML = '';
+            if (pastor.groupMembers && pastor.groupMembers.length > 0) {
+                const memberCount = pastor.groupMembers.filter(m => m.name.trim() !== "").length;
+                membersListHTML = `
+                    <div class="members-list" id="membersList">
+                        <div class="members-title" onclick="toggleMembersList()">
+                            👥 Your Group Members (${memberCount})
+                            <span class="collapse-icon">▼</span>
+                        </div>
+                        <div class="members-container">
+                            ${pastor.groupMembers
+                            .filter(member => member.name.trim() !== "")
+                            .map(member => {
+    const memberPhone = sanitizePhoneNumber(member.phone_number);
+    const whatsappMessage = encodeURIComponent(`Hello ${member.name}, this is Pastor ${pastor.name} from your Bible study group.`);
+
+    return `
+        <div class="member-item">
+            <div class="member-info">
+                <strong>${member.name}</strong><br>
+                <span>${member.phone_number || 'No phone number'}</span>
+            </div>
+            ${memberPhone ? `
+                <div class="contact-buttons">
+                    <a href="https://wa.me/${memberPhone}?text=${whatsappMessage}" 
+                       target="_blank" 
+                       class="contact-btn whatsapp-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="18" height="18" fill="currentColor">
+                            <path d="M16.001 3.2c-7.037 0-12.8 5.734-12.8 12.8 0 2.257.591 4.431 1.718 6.367l-1.834 6.694 
+                            6.855-1.798c1.88 1.026 4.005 1.56 6.061 1.56h.001c7.037 0 12.8-5.734 12.8-12.8s-5.763-12.823-12.8-12.823zm0 
+                            23.467c-1.771 0-3.505-.463-5.038-1.337l-.361-.208-4.065 1.066 1.085-3.963-.235-.375c-1.032-1.655-1.577-3.564-1.577-5.55 
+                            0-5.71 4.65-10.36 10.36-10.36s10.36 4.65 10.36 10.36-4.65 10.367-10.36 10.367zm5.619-7.776c-.307-.154-1.814-.894-2.095-.996-.28-.103-.484-.154-.687.154s-.791.996-.968 
+                            1.2c-.176.205-.356.23-.663.077-.307-.154-1.296-.477-2.468-1.52-.912-.813-1.528-1.813-1.705-2.12-.176-.308-.019-.474.134-.627.138-.138.307-.356.46-.534.154-.179.205-.308.307-.514.103-.205.052-.385-.026-.539-.077-.154-.687-1.662-.941-2.285-.248-.595-.498-.514-.687-.524-.176-.01-.385-.012-.594-.012s-.539.077-.82.385c-.28.308-1.077 
+                            1.051-1.077 2.56s1.102 2.971 1.255 3.179c.154.205 2.167 3.308 5.252 4.634.734.317 1.306.507 1.752.65.735.234 1.404.201 1.935.122.59-.088 1.814-.741 
+                            2.071-1.456.256-.715.256-1.328.179-1.456-.077-.128-.28-.205-.59-.359z"/>
+                        </svg>
+                        WhatsApp
+                    </a>
+                    <a href="tel:${member.phone_number}" 
+                       class="contact-btn call-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path d="M6.62 10.79a15.464 15.464 0 006.59 6.59l2.2-2.2a1 1 0 011.05-.24c1.12.37 2.33.57 3.54.57a1 
+                            1 0 011 1V21a1 1 0 01-1 1C10.07 22 2 13.93 2 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.21.2 2.42.57 
+                            3.54a1 1 0 01-.24 1.05l-2.21 2.2z"/>
+                        </svg>
+                        Call
+                    </a>
+                </div>
+            ` : '<div class="contact-buttons"><span style="color: #999;">No contact available</span></div>'}
+        </div>
+    `;
+}).join('')
+}
+                        </div>
+                    </div>
+                `;
+            } else {
+                membersListHTML = `
+                    <div class="detail-item">
+                        <div class="detail-label">👥 Group Members</div>
+                        <div class="detail-value">No members found in your group or group information not available.</div>
+                    </div>
+                `;
+            }
+
+            results.innerHTML = `
+                <div class="result-header">
+                    <div class="result-icon pastor-icon">✝️</div>
+                    <div>
+                        <div class="result-name">${pastor.name}</div>
+                        <div class="result-role">Pastor of ${pastor.group || 'Bible Study Group'}</div>
+                    </div>
+                </div>
+                <div class="result-details">
+                    <div class="detail-item">
+                        <div class="detail-label"> Your Role</div>
+                        <div class="detail-value">You are the Pastor of ${pastor.group || 'your Bible study group'}</div>
+                    </div>
+                    ${membersListHTML}
+                </div>
+                <div class="action-buttons">
+                    <button class="back-btn" onclick="resetSearch()">Search Again</button>
+                </div>
+            `;
+            
+            results.style.display = 'block';
+        }
+
+        function toggleMembersList() {
+            const membersList = document.getElementById('membersList');
+            if (membersList) {
+                membersList.classList.toggle('collapsed');
+            }
+        }
+
+        function displayNotFound(userType = currentUserType) {
+    const results = document.getElementById('results');
+
+    let message, actionButtons;
+    
+    if (userType === 'member') {
+        message = "We couldn't find your name in our Bible study system. You can update your details or contact our sub-committee for assistance.";
+        actionButtons = `
+            <a href="https://forms.gle/giU2hsEkXTGduF436" target="_blank" class="action-btn update-btn">
+                <i class="fa-solid fa-pen-to-square"></i>
+                Update Your Details
+            </a>
+            <button class="action-btn subcommittee-btn" onclick="showSubCommittee()">
+                <i class="fa-solid fa-people-group"></i>
+                Contact Sub-Committee
+            </button>
+        `;
+    } else {
+        message = "We couldn't find the pastor or their group members. Please check spelling or contact the sub-committee for assistance.";
+        actionButtons = `
+            <button class="action-btn subcommittee-btn" onclick="showSubCommitteeForPastor()">
+                <i class="fa-solid fa-people-group"></i>
+                Contact Sub-Committee
+            </button>
+        `;
+    }
+
+    results.innerHTML = `
+        <div class="not-found">
+            <div class="not-found-icon-container">
+                <div class="not-found-icon">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </div>
+            <h3 class="not-found-title">Name Not Found</h3>
+            <p class="not-found-message">${message}</p>
+            <div class="action-buttons">
+                ${actionButtons}
+                <button class="back-btn" onclick="resetSearch()">
+                    <i class="fa-solid fa-rotate-left"></i> Search Again
+                </button>
+            </div>
+        </div>
+    `;
+
+    results.style.display = 'block';
+}
+
+
+        function showError(message, isError = true) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.background = isError 
+                ? 'linear-gradient(135deg, #ffebee 0%, #fce4ec 100%)'
+                : 'linear-gradient(135deg, #e3f2fd 0%, #fce4ec 100%)';
+            errorDiv.style.color = isError ? '#c62828' : '#1976d2';
+            errorDiv.classList.add('show');
+        }
+
+        function hideError() {
+            document.getElementById('errorMessage').classList.remove('show');
+        }
+
+        function showSubCommitteeForPastor() {
+            const results = document.getElementById('results');
+            
+            results.innerHTML = `
+                <div class="result-header">
+                    <div class="result-icon pastor-icon"><i class="fa-solid fa-phone-square"></i>
+</div>
+                    <div>
+                        <div class="result-name">Sub-Committee Members</div>
+                        <div class="result-role">Contact for Assistance</div>
+                    </div>
+                </div>
+                <div class="result-details">
+                    <div class="members-list">
+                        <div class="members-title"><i class="fa-solid fa-clipboard-list"></i>
+                         Sub-Committee Contact List</div>
+                        <div class="members-container">
+                            ${SUBCOM_MEMBERS.map(member => {
+                                const phone = sanitizePhoneNumber(member.phone);
+                                const message = encodeURIComponent(`Hello ${member.name}, I am a pastor and could not find my group information. Kindly assist me.`);
+                                return `
+                                    <div class="member-item">
+                                        <div class="member-info">
+                                            <strong>${member.name}</strong><br>
+                                            <span>${member.phone}</span>
+                                        </div>
+                                        <div class="contact-buttons">
+                                            <a href="https://wa.me/${phone}?text=${message}" target="_blank" class="contact-btn whatsapp-btn"><i class="fa-brands fa-whatsapp"></i>
+                                              WhatsApp</a>
+                                            <a href="tel:${member.phone}" class="contact-btn call-btn"><i class="fa-solid fa-phone-square"></i>
+                                               Call</a>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="back-btn" onclick="resetSearch()">Search Again</button>
+                </div>
+            `;
+        }
+
+function showGroupMembers() {
+    const results = document.getElementById('results');
+
+    // Find the currently displayed member from last search
+    const memberName = document.querySelector('.result-name')?.textContent || null;
+    const memberGroupText = document.querySelector('.detail-value')?.textContent || null;
+
+    if (!memberName || !memberGroupText) {
+        showError('Could not determine your group. Please search again.');
+        return;
+    }
+
+    const memberGroup = Number(memberGroupText);
+
+    // Filter members in same group, excluding self
+    const groupMembers = membersData.filter(m =>
+        Number(m.group) === memberGroup && normalizeText(m.name) !== normalizeText(memberName)
+    );
+
+    let membersListHTML = '';
+    if (groupMembers.length > 0) {
+        membersListHTML = `
+            <div class="members-list" id="membersList">
+                <div class="members-title">
+                    <i class="fa-solid fa-user-group"></i> Fellow Group Members (${groupMembers.length})
+                </div>
+                <div class="members-container">
+                    ${groupMembers.map(member => {
+                        const memberPhone = sanitizePhoneNumber(member.phone_number);
+                        const whatsappMessage = encodeURIComponent(
+                            `Hello ${member.name}, I am your fellow member in Group ${memberGroup}.`
+                        );
+                        return `
+                            <div class="member-item">
+                                <div class="member-info">
+                                    <strong>${member.name}</strong><br>
+                                    <span>${member.phone_number || 'No phone number'}</span>
+                                </div>
+                                ${memberPhone ? `
+                                    <div class="contact-buttons">
+                                        <a href="https://wa.me/${memberPhone}?text=${whatsappMessage}" 
+                                           target="_blank" 
+                                           class="contact-btn whatsapp-btn">
+                                           <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                                        </a>
+                                        <a href="tel:${member.phone_number}" 
+                                           class="contact-btn call-btn">
+                                           <i class="fa-solid fa-phone"></i> Call
+                                        </a>
+                                    </div>
+                                ` : '<div class="contact-buttons"><span style="color: #999;">No contact available</span></div>'}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        membersListHTML = `
+            <div class="detail-item">
+                <div class="detail-label"><i class="fa-solid fa-user-group"></i> Fellow Members</div>
+                <div class="detail-value">No other members found in your group.</div>
+            </div>
+        `;
+    }
+
+    results.innerHTML = `
+        <div class="result-header">
+            <div class="result-icon member-icon"><i class="fa-solid fa-user-group"></i></div>
+            <div>
+                <div class="result-name">Group ${memberGroup}</div>
+                <div class="result-role">Fellow Members in Your Group</div>
+            </div>
+        </div>
+        <div class="result-details">
+            ${membersListHTML}
+        </div>
+        <div class="action-buttons">
+            <button class="back-btn" onclick="resetSearch()">Search Again</button>
+        </div>
+    `;
+
+    results.style.display = 'block';
+}
+
+
+
+        function showSubCommittee() {
+            const results = document.getElementById('results');
+            
+            results.innerHTML = `
+                <div class="result-header">
+                    <div class="result-icon member-icon"><i class="fa-solid fa-phone-volume"></i>
+                                   </div>
+                    <div>
+                        <div class="result-name">Sub-Committee Members</div>
+                        <div class="result-role">Contact for Assistance</div>
+                    </div>
+                </div>
+                <div class="result-details">
+                    <div class="members-list">
+                        <div class="members-title">
+                            <i class="fa-solid fa-clipboard-list"></i>
+                               Sub-Committee Contact List</div>
+                        <div class="members-container">
+                            ${SUBCOM_MEMBERS.map(member => {
+                                const phone = sanitizePhoneNumber(member.phone);
+                                const message = encodeURIComponent(`Hello ${member.name}, I need assistance with my Bible study group information.`);
+                                return `
+                                    <div class="member-item">
+                                        <div class="member-info">
+                                            <strong>${member.name}</strong><br>
+                                            <span>${member.phone}</span>
+                                        </div>
+                                        <div class="contact-buttons">
+                                            <a href="https://wa.me/${phone}?text=${message}" target="_blank" class="contact-btn whatsapp-btn"><i class="fa-brands fa-whatsapp"></i>
+                                               WhatsApp</a>
+                                            <a href="tel:${member.phone}" class="contact-btn call-btn"><i class="fa-solid fa-phone-volume"></i>
+                                              Call</a>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="back-btn" onclick="resetSearch()">Search Again</button>
+                </div>
+            `;
+        }
+
+        function resetSearch() {
+            // Hide all sections
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
+            hideError();
+            hideAutocomplete();
+            
+            // Show appropriate search card
+            const memberCard = document.getElementById('memberSearchCard');
+            const pastorCard = document.getElementById('pastorSearchCard');
+            
+            memberCard.classList.toggle('active', currentUserType === 'member');
+            pastorCard.classList.toggle('active', currentUserType === 'pastor');
+            
+            // Clear and focus input
+            const activeInput = currentUserType === 'member' 
+                ? document.getElementById('memberNameInput')
+                : document.getElementById('pastorNameInput');
+            
+            activeInput.value = '';
+            activeInput.focus();
+        }
+
+        function showLoading() {
+            document.getElementById('memberSearchCard').classList.remove('active');
+            document.getElementById('pastorSearchCard').classList.remove('active');
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
